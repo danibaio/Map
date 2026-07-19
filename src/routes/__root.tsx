@@ -78,21 +78,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Escuadrón de las Sombras" },
+      { title: "Escuadrón de las Sombras — Mapa Interactivo" },
       {
         name: "description",
         content:
-          "Mapa interactivo del Escuadrón de las Sombras — consulta y edita marcadores en tiempo real.",
+          "Mapa interactivo del Escuadrón de las Sombras. Consulta ubicaciones, NPCs, recursos y enemigos.",
       },
       { name: "author", content: "Hitt0" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "Escuadrón de las Sombras — Mapa Interactivo" },
+      { name: "twitter:title", content: "Escuadrón de las Sombras — Mapa Interactivo" },
+      { property: "og:description", content: "Mapa interactivo del Escuadrón de las Sombras. Consulta ubicaciones, NPCs, recursos y enemigos." },
+      { name: "twitter:description", content: "Mapa interactivo del Escuadrón de las Sombras. Consulta ubicaciones, NPCs, recursos y enemigos." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/df506b3c-3c9d-4b2a-910f-d3125658751a/id-preview-f876a860--82b1d97f-b938-4ab5-b525-0f0bb0edcfdc.lovable.app-1784493196097.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/df506b3c-3c9d-4b2a-910f-d3125658751a/id-preview-f876a860--82b1d97f-b938-4ab5-b525-0f0bb0edcfdc.lovable.app-1784493196097.png" },
+      { property: "og:type", content: "website" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
   shellComponent: RootShell,
