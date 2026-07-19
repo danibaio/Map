@@ -14,7 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      markers: {
+        Row: {
+          created_at: string
+          group_key: string
+          icon: string | null
+          id: string
+          name: string
+          note: string | null
+          type_key: string
+          updated_at: string
+          x: number
+          y: number
+        }
+        Insert: {
+          created_at?: string
+          group_key: string
+          icon?: string | null
+          id?: string
+          name: string
+          note?: string | null
+          type_key: string
+          updated_at?: string
+          x: number
+          y: number
+        }
+        Update: {
+          created_at?: string
+          group_key?: string
+          icon?: string | null
+          id?: string
+          name?: string
+          note?: string | null
+          type_key?: string
+          updated_at?: string
+          x?: number
+          y?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
