@@ -1,24 +1,40 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+// Leaflet solo funciona en el navegador, por eso deshabilitamos SSR en esta ruta.
+const MapView = lazy(() => import("@/components/map/MapView"));
+
 export const Route = createFileRoute("/")({
+  ssr: false,
+  head: () => ({
+    meta: [
+      { title: "Escuadrón de las Sombras — Mapa Interactivo" },
+      {
+        name: "description",
+        content:
+          "Mapa interactivo del Escuadrón de las Sombras. Consulta ubicaciones, NPCs, recursos y enemigos.",
+      },
+      { property: "og:title", content: "Escuadrón de las Sombras — Mapa Interactivo" },
+      {
+        property: "og:description",
+        content: "Mapa interactivo con marcadores, filtros y modo edición.",
+      },
+      { property: "og:type", content: "website" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
+    <Suspense
+      fallback={
+        <div className="flex h-screen w-screen items-center justify-center bg-[#1a1410] font-serif text-[#f2d9a4]">
+          Cargando el mapa...
+        </div>
+      }
     >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+      <MapView />
+    </Suspense>
   );
 }
