@@ -140,5 +140,72 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: "Georgia", "Times New Roman", serif;
   }
+}
+
+/* Marcadores personalizados con estética medieval */
+.custom-map-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.marker-pin {
+  width: 36px;
+  height: 44px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.6));
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.marker-pin:hover {
+  transform: scale(1.15);
+}
+
+.marker-pin::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--pin-color, #c9a96a);
+  border: 2px solid #1f150c;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  top: -4px;
+}
+
+.marker-pin > span {
+  position: relative;
+  z-index: 1;
+  font-size: 18px;
+  line-height: 1;
+  margin-top: -6px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Popups Leaflet con estilo medieval */
+.leaflet-popup-content-wrapper {
+  background: #f2e6c8 !important;
+  color: #2b1e12 !important;
+  border: 2px solid #7a5c2e !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+}
+.leaflet-popup-tip {
+  background: #f2e6c8 !important;
+  border: 2px solid #7a5c2e !important;
+}
+.leaflet-container {
+  outline: none;
+}
+.leaflet-control-zoom a {
+  background: #2b1e12 !important;
+  color: #f2d9a4 !important;
+  border-color: #7a5c2e !important;
+}
+.leaflet-control-zoom a:hover {
+  background: #3d2a19 !important;
 }
