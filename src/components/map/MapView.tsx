@@ -69,16 +69,8 @@ function MapClickHandler({
   return null;
 }
 
-// Componente para hacer zoom/centrar en un marcador buscado.
-function FlyToController({ target }: { target: [number, number] | null }) {
-  const map = useMap();
-  useEffect(() => {
-    if (target) {
-      map.flyTo(target, Math.max(map.getZoom(), 1), { duration: 0.8 });
-    }
-  }, [target, map]);
-  return null;
-}
+
+
 
 export default function MapView() {
   const [markers, setMarkers] = useState<DbMarker[]>([]);
