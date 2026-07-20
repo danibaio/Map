@@ -160,26 +160,12 @@ export default function MapView() {
 
   // Filtrado real: si el grupo o el tipo está desactivado, no se renderiza.
   const visibleMarkers = useMemo(() => {
-    const q = search.trim().toLowerCase();
     return markers.filter((m) => {
       if (!activeGroups[m.group_key]) return false;
       if (!activeTypes[`${m.group_key}:${m.type_key}`]) return false;
-      if (q) {
-        const hay = `${m.name} ${m.note ?? ""}`.toLowerCase();
-        if (!hay.includes(q)) return false;
-      }
       return true;
     });
-  }, [markers, activeGroups, activeTypes, search]);
-
-  // Resultados de búsqueda para el desplegable.
-  const searchResults = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return [];
-    return markers
-      .filter((m) => `${m.name} ${m.note ?? ""}`.toLowerCase().includes(q))
-      .slice(0, 8);
-  }, [markers, search]);
+  }, [markers, activeGroups, activeTypes]);
 
   const handleMapClick = (latlng: L.LatLng) => {
     setNewAt({ x: latlng.lng, y: latlng.lat });
