@@ -69,11 +69,16 @@ export default function MarkerFormDialog({
   };
 
   const submit = () => {
-    if (!name.trim()) return;
+    const trimmed = name.trim();
+    if (isCustom && !trimmed) return;
+    const typeName =
+      currentGroup?.types.find((tt) => tt.key === typeKey)?.name ?? "";
+    const finalName = trimmed || typeName;
+    if (!finalName) return;
     onSubmit({
       group_key: groupKey,
       type_key: isCustom ? "custom" : typeKey,
-      name: name.trim(),
+      name: finalName,
       note: note.trim(),
       icon: isCustom ? icon : null,
     });
