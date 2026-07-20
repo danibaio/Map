@@ -87,6 +87,7 @@ export default function MapView() {
 
   const [editMode, setEditMode] = useState(false);
   const [askPassword, setAskPassword] = useState(false);
+  const [askDeletePassword, setAskDeletePassword] = useState<DbMarker | null>(null);
 
   const [activeGroups, setActiveGroups] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(MARKER_GROUPS.map((g) => [g.key, true])),
@@ -98,8 +99,6 @@ export default function MapView() {
   });
 
   const [showFilters, setShowFilters] = useState(true);
-  const [search, setSearch] = useState("");
-  const [flyTarget, setFlyTarget] = useState<[number, number] | null>(null);
 
   // Estado para crear un marcador nuevo en un punto concreto del mapa.
   const [newAt, setNewAt] = useState<{ x: number; y: number } | null>(null);
