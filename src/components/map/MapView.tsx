@@ -31,6 +31,7 @@ export type DbMarker = {
   icon: string | null;
   x: number;
   y: number;
+  created_at?: string;
 };
 
 // El mapa usa coordenadas simples basadas en la imagen.
