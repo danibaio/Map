@@ -205,8 +205,9 @@ export default function MapView() {
     setEditing(null);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("¿Eliminar este marcador definitivamente?")) return;
+  const FIVE_MIN_MS = 5 * 60 * 1000;
+
+  const performDelete = async (id: string) => {
     const { error } = await supabase.from("markers").delete().eq("id", id);
     if (error) {
       toast.error("No se pudo eliminar: " + error.message);
@@ -214,6 +215,28 @@ export default function MapView() {
     }
     toast.success("Marcador eliminado");
     setActionOn(null);
+    setAskDeletePassword(null);
+  };
+
+  const handleDelete = async (marker: DbMarker) => {
+    const createdAt = marker.created_at ? new Date(marker.created_at).getTime() : 0;
+    const age = Date.now() - createdAt;
+    if (createdAt && age <= FIVE_MIN_MS) {
+      if (!confirm("¿Eliminar este marcador definitivamente?")) return;
+      await performDelete(marker.id);
+      return;
+    }
+    // Antiguo: requiere contraseña de borrado.
+    setActionOn(null);
+    setAskDeletePassword(marker);
+  };
+
+  const handleDeletePasswordSubmit = async (pwd: string) => {
+    if (pwd !== "0107") {
+      toast.error("Contraseña incorrecta");
+      return;
+    }
+    if (askDeletePassword) await performDelete(askDeletePassword.id);
   };
 
   const handleDragEnd = async (id: string, latlng: L.LatLng) => {
