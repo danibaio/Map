@@ -147,12 +147,14 @@ export default function MarkerFormDialog({
           )}
 
           <div>
-            <Label className="text-[#e0c893]">Nombre</Label>
+            <Label className="text-[#e0c893]">
+              Nombre {isCustom ? "" : <span className="text-[#8a6e42]">(opcional)</span>}
+            </Label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="mt-1 border-[#7a5c2e] bg-[#1f150c] text-[#f2d9a4]"
-              placeholder="Nombre del marcador"
+              placeholder={isCustom ? "Nombre del marcador" : "Si se deja vacío, se usa el nombre del tipo"}
               autoFocus
             />
           </div>
