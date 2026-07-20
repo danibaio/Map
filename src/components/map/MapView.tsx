@@ -257,7 +257,7 @@ export default function MapView() {
   };
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-[#1a1410]">
+    <div className="relative h-screen w-screen overflow-hidden bg-black">
       {/* Header medieval */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[900] flex items-start justify-between p-4">
         <div className="pointer-events-auto">
