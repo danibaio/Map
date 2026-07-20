@@ -14,9 +14,10 @@ type Props = {
   open: boolean;
   onOpenChange: (o: boolean) => void;
   onSubmit: (pwd: string) => void;
+  title?: string;
 };
 
-export default function PasswordDialog({ open, onOpenChange, onSubmit }: Props) {
+export default function PasswordDialog({ open, onOpenChange, onSubmit, title = "🗝 Modo edición" }: Props) {
   const [pwd, setPwd] = useState("");
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export default function PasswordDialog({ open, onOpenChange, onSubmit }: Props) 
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="z-[1100] max-w-sm border-2 border-[#7a5c2e] bg-[#2b1e12] text-[#f2d9a4]">
         <DialogHeader>
-          <DialogTitle className="font-serif text-xl">🗝 Modo edición</DialogTitle>
+          <DialogTitle className="font-serif text-xl">{title}</DialogTitle>
         </DialogHeader>
         <form
           onSubmit={(e) => {
