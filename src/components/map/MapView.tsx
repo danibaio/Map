@@ -402,7 +402,7 @@ export default function MapView() {
       </div>
 
       {loading && (
-        <div className="absolute inset-0 z-[800] flex items-center justify-center bg-[#1a1410]/80 text-[#f2d9a4]">
+        <div className="absolute inset-0 z-[800] flex items-center justify-center bg-black/80 text-[#f2d9a4]">
           Cargando mapa...
         </div>
       )}
@@ -412,6 +412,13 @@ export default function MapView() {
         open={askPassword}
         onOpenChange={setAskPassword}
         onSubmit={handlePasswordSubmit}
+      />
+
+      <PasswordDialog
+        open={askDeletePassword !== null}
+        onOpenChange={(o) => !o && setAskDeletePassword(null)}
+        onSubmit={handleDeletePasswordSubmit}
+        title="🗝 Eliminar marcador antiguo"
       />
 
       <MarkerFormDialog
@@ -436,8 +443,9 @@ export default function MapView() {
           setEditing(actionOn);
           setActionOn(null);
         }}
-        onDelete={() => actionOn && handleDelete(actionOn.id)}
+        onDelete={() => actionOn && handleDelete(actionOn)}
       />
+
     </div>
   );
 }
