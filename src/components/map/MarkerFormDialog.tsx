@@ -181,7 +181,7 @@ export default function MarkerFormDialog({
           </Button>
           <Button
             onClick={submit}
-            disabled={!name.trim()}
+            disabled={isCustom && !name.trim()}
             className="bg-[#c9a96a] text-[#1a1410] hover:bg-[#d4b878]"
           >
             Guardar
