@@ -325,11 +325,11 @@ export default function MapView() {
         ref={(m) => {
           if (m) mapRef.current = m;
         }}
-        style={{ background: "#1a1410" }}
+        style={{ background: "#000000" }}
       >
         <ImageOverlay url={mapAsset.url} bounds={BOUNDS} />
         <MapClickHandler editMode={editMode} onMapClick={handleMapClick} />
-        <FlyToController target={flyTarget} />
+
 
         {visibleMarkers.map((m) => {
           const group = MARKER_GROUPS.find((g) => g.key === m.group_key);
