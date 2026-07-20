@@ -6,7 +6,6 @@ import {
   ImageOverlay,
   Marker,
   Popup,
-  useMap,
   useMapEvents,
 } from "react-leaflet";
 import { toast } from "sonner";
@@ -19,8 +18,8 @@ import MarkerFormDialog from "./MarkerFormDialog";
 import EditActionsDialog from "./EditActionsDialog";
 import PasswordDialog from "./PasswordDialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Lock, LockOpen, Menu, Search, X } from "lucide-react";
+import { Lock, LockOpen, Menu } from "lucide-react";
+
 
 export type DbMarker = {
   id: string;
