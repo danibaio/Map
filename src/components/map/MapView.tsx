@@ -6,7 +6,6 @@ import {
   ImageOverlay,
   Marker,
   Popup,
-  useMap,
   useMapEvents,
 } from "react-leaflet";
 import { toast } from "sonner";
@@ -19,8 +18,8 @@ import MarkerFormDialog from "./MarkerFormDialog";
 import EditActionsDialog from "./EditActionsDialog";
 import PasswordDialog from "./PasswordDialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Lock, LockOpen, Menu, Search, X } from "lucide-react";
+import { Lock, LockOpen, Menu } from "lucide-react";
+
 
 export type DbMarker = {
   id: string;
@@ -31,6 +30,7 @@ export type DbMarker = {
   icon: string | null;
   x: number;
   y: number;
+  created_at?: string;
 };
 
 // El mapa usa coordenadas simples basadas en la imagen.
@@ -69,16 +69,8 @@ function MapClickHandler({
   return null;
 }
 
-// Componente para hacer zoom/centrar en un marcador buscado.
-function FlyToController({ target }: { target: [number, number] | null }) {
-  const map = useMap();
-  useEffect(() => {
-    if (target) {
-      map.flyTo(target, Math.max(map.getZoom(), 1), { duration: 0.8 });
-    }
-  }, [target, map]);
-  return null;
-}
+
+
 
 export default function MapView() {
   const [markers, setMarkers] = useState<DbMarker[]>([]);
@@ -86,6 +78,7 @@ export default function MapView() {
 
   const [editMode, setEditMode] = useState(false);
   const [askPassword, setAskPassword] = useState(false);
+  const [askDeletePassword, setAskDeletePassword] = useState<DbMarker | null>(null);
 
   const [activeGroups, setActiveGroups] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(MARKER_GROUPS.map((g) => [g.key, true])),
@@ -97,8 +90,6 @@ export default function MapView() {
   });
 
   const [showFilters, setShowFilters] = useState(true);
-  const [search, setSearch] = useState("");
-  const [flyTarget, setFlyTarget] = useState<[number, number] | null>(null);
 
   // Estado para crear un marcador nuevo en un punto concreto del mapa.
   const [newAt, setNewAt] = useState<{ x: number; y: number } | null>(null);
@@ -160,26 +151,12 @@ export default function MapView() {
 
   // Filtrado real: si el grupo o el tipo está desactivado, no se renderiza.
   const visibleMarkers = useMemo(() => {
-    const q = search.trim().toLowerCase();
     return markers.filter((m) => {
       if (!activeGroups[m.group_key]) return false;
       if (!activeTypes[`${m.group_key}:${m.type_key}`]) return false;
-      if (q) {
-        const hay = `${m.name} ${m.note ?? ""}`.toLowerCase();
-        if (!hay.includes(q)) return false;
-      }
       return true;
     });
-  }, [markers, activeGroups, activeTypes, search]);
-
-  // Resultados de búsqueda para el desplegable.
-  const searchResults = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return [];
-    return markers
-      .filter((m) => `${m.name} ${m.note ?? ""}`.toLowerCase().includes(q))
-      .slice(0, 8);
-  }, [markers, search]);
+  }, [markers, activeGroups, activeTypes]);
 
   const handleMapClick = (latlng: L.LatLng) => {
     setNewAt({ x: latlng.lng, y: latlng.lat });
@@ -228,8 +205,9 @@ export default function MapView() {
     setEditing(null);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("¿Eliminar este marcador definitivamente?")) return;
+  const FIVE_MIN_MS = 5 * 60 * 1000;
+
+  const performDelete = async (id: string) => {
     const { error } = await supabase.from("markers").delete().eq("id", id);
     if (error) {
       toast.error("No se pudo eliminar: " + error.message);
@@ -237,6 +215,28 @@ export default function MapView() {
     }
     toast.success("Marcador eliminado");
     setActionOn(null);
+    setAskDeletePassword(null);
+  };
+
+  const handleDelete = async (marker: DbMarker) => {
+    const createdAt = marker.created_at ? new Date(marker.created_at).getTime() : 0;
+    const age = Date.now() - createdAt;
+    if (createdAt && age <= FIVE_MIN_MS) {
+      if (!confirm("¿Eliminar este marcador definitivamente?")) return;
+      await performDelete(marker.id);
+      return;
+    }
+    // Antiguo: requiere contraseña de borrado.
+    setActionOn(null);
+    setAskDeletePassword(marker);
+  };
+
+  const handleDeletePasswordSubmit = async (pwd: string) => {
+    if (pwd !== "0107") {
+      toast.error("Contraseña incorrecta");
+      return;
+    }
+    if (askDeletePassword) await performDelete(askDeletePassword.id);
   };
 
   const handleDragEnd = async (id: string, latlng: L.LatLng) => {
@@ -271,7 +271,7 @@ export default function MapView() {
   };
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-[#1a1410]">
+    <div className="relative h-screen w-screen overflow-hidden bg-black">
       {/* Header medieval */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[900] flex items-start justify-between p-4">
         <div className="pointer-events-auto">
@@ -309,43 +309,6 @@ export default function MapView() {
         </div>
       </div>
 
-      {/* Buscador */}
-      <div className="absolute left-1/2 top-20 z-[900] w-[92%] max-w-md -translate-x-1/2">
-        <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8a6e42]" />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar marcador..."
-            className="border-[#7a5c2e] bg-[#2b1e12]/95 pl-9 text-[#f2d9a4] placeholder:text-[#8a6e42] focus-visible:ring-[#c9a96a]"
-          />
-          {search && (
-            <button
-              onClick={() => setSearch("")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-[#8a6e42] hover:text-[#f2d9a4]"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-          {searchResults.length > 0 && (
-            <div className="absolute inset-x-0 top-full mt-1 max-h-64 overflow-auto rounded-md border border-[#7a5c2e] bg-[#2b1e12]/98 shadow-2xl">
-              {searchResults.map((r) => (
-                <button
-                  key={r.id}
-                  onClick={() => {
-                    setFlyTarget([r.y, r.x]);
-                    setSearch("");
-                  }}
-                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[#f2d9a4] hover:bg-[#3d2a19]"
-                >
-                  <span>{iconFor(r.group_key, r.type_key, r.icon)}</span>
-                  <span className="flex-1 truncate">{r.name}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
 
       {/* Panel de filtros */}
       {showFilters && (
@@ -385,11 +348,11 @@ export default function MapView() {
         ref={(m) => {
           if (m) mapRef.current = m;
         }}
-        style={{ background: "#1a1410" }}
+        style={{ background: "#000000" }}
       >
         <ImageOverlay url={mapAsset.url} bounds={BOUNDS} />
         <MapClickHandler editMode={editMode} onMapClick={handleMapClick} />
-        <FlyToController target={flyTarget} />
+
 
         {visibleMarkers.map((m) => {
           const group = MARKER_GROUPS.find((g) => g.key === m.group_key);
@@ -439,7 +402,7 @@ export default function MapView() {
       </div>
 
       {loading && (
-        <div className="absolute inset-0 z-[800] flex items-center justify-center bg-[#1a1410]/80 text-[#f2d9a4]">
+        <div className="absolute inset-0 z-[800] flex items-center justify-center bg-black/80 text-[#f2d9a4]">
           Cargando mapa...
         </div>
       )}
@@ -449,6 +412,13 @@ export default function MapView() {
         open={askPassword}
         onOpenChange={setAskPassword}
         onSubmit={handlePasswordSubmit}
+      />
+
+      <PasswordDialog
+        open={askDeletePassword !== null}
+        onOpenChange={(o) => !o && setAskDeletePassword(null)}
+        onSubmit={handleDeletePasswordSubmit}
+        title="🗝 Eliminar marcador antiguo"
       />
 
       <MarkerFormDialog
@@ -473,8 +443,9 @@ export default function MapView() {
           setEditing(actionOn);
           setActionOn(null);
         }}
-        onDelete={() => actionOn && handleDelete(actionOn.id)}
+        onDelete={() => actionOn && handleDelete(actionOn)}
       />
+
     </div>
   );
 }
