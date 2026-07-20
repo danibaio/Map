@@ -295,43 +295,6 @@ export default function MapView() {
         </div>
       </div>
 
-      {/* Buscador */}
-      <div className="absolute left-1/2 top-20 z-[900] w-[92%] max-w-md -translate-x-1/2">
-        <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8a6e42]" />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar marcador..."
-            className="border-[#7a5c2e] bg-[#2b1e12]/95 pl-9 text-[#f2d9a4] placeholder:text-[#8a6e42] focus-visible:ring-[#c9a96a]"
-          />
-          {search && (
-            <button
-              onClick={() => setSearch("")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-[#8a6e42] hover:text-[#f2d9a4]"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-          {searchResults.length > 0 && (
-            <div className="absolute inset-x-0 top-full mt-1 max-h-64 overflow-auto rounded-md border border-[#7a5c2e] bg-[#2b1e12]/98 shadow-2xl">
-              {searchResults.map((r) => (
-                <button
-                  key={r.id}
-                  onClick={() => {
-                    setFlyTarget([r.y, r.x]);
-                    setSearch("");
-                  }}
-                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[#f2d9a4] hover:bg-[#3d2a19]"
-                >
-                  <span>{iconFor(r.group_key, r.type_key, r.icon)}</span>
-                  <span className="flex-1 truncate">{r.name}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
 
       {/* Panel de filtros */}
       {showFilters && (
