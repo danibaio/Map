@@ -84,21 +84,27 @@ export default function MarkerFormDialog({
     });
   };
 
+  const inputCls =
+    "mt-1 border-[#7a1414] bg-[#0a0a0a] text-[#e8dfd0] focus-visible:ring-[#b81a1a]";
+  const labelCls = "uppercase tracking-wider text-[#b81a1a]";
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="z-[1100] max-w-md border-2 border-[#7a5c2e] bg-[#2b1e12] text-[#f2d9a4]">
+      <DialogContent className="z-[1100] max-w-md border-2 border-[#7a1414] bg-black text-[#e8dfd0] shadow-[0_0_30px_rgba(184,26,26,0.5)]">
         <DialogHeader>
-          <DialogTitle className="font-serif text-xl">{title}</DialogTitle>
+          <DialogTitle className="font-serif text-xl uppercase tracking-widest">
+            {title}
+          </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-3">
           <div>
-            <Label className="text-[#e0c893]">Grupo</Label>
+            <Label className={labelCls}>Grupo</Label>
             <Select value={groupKey} onValueChange={handleGroupChange}>
-              <SelectTrigger className="mt-1 border-[#7a5c2e] bg-[#1f150c] text-[#f2d9a4]">
+              <SelectTrigger className={inputCls}>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="z-[1200] border-[#7a5c2e] bg-[#2b1e12] text-[#f2d9a4]">
+              <SelectContent className="z-[1200] border-[#7a1414] bg-black text-[#e8dfd0]">
                 {MARKER_GROUPS.map((g) => (
                   <SelectItem key={g.key} value={g.key}>
                     {g.name}
@@ -110,12 +116,12 @@ export default function MarkerFormDialog({
 
           {!isCustom && currentGroup && (
             <div>
-              <Label className="text-[#e0c893]">Tipo</Label>
+              <Label className={labelCls}>Tipo</Label>
               <Select value={typeKey} onValueChange={setTypeKey}>
-                <SelectTrigger className="mt-1 border-[#7a5c2e] bg-[#1f150c] text-[#f2d9a4]">
+                <SelectTrigger className={inputCls}>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="z-[1200] border-[#7a5c2e] bg-[#2b1e12] text-[#f2d9a4]">
+                <SelectContent className="z-[1200] border-[#7a1414] bg-black text-[#e8dfd0]">
                   {currentGroup.types.map((t) => (
                     <SelectItem key={t.key} value={t.key}>
                       {t.icon} {t.name}
@@ -128,15 +134,17 @@ export default function MarkerFormDialog({
 
           {isCustom && (
             <div>
-              <Label className="text-[#e0c893]">Icono</Label>
-              <div className="mt-1 grid max-h-40 grid-cols-8 gap-1 overflow-auto rounded border border-[#7a5c2e] bg-[#1f150c] p-2">
+              <Label className={labelCls}>Icono</Label>
+              <div className="mt-1 grid max-h-40 grid-cols-8 gap-1 overflow-auto rounded border border-[#7a1414] bg-[#0a0a0a] p-2">
                 {CUSTOM_ICONS.map((ic) => (
                   <button
                     key={ic}
                     type="button"
                     onClick={() => setIcon(ic)}
                     className={`flex h-8 w-8 items-center justify-center rounded text-lg transition-colors ${
-                      icon === ic ? "bg-[#c9a96a] text-[#1a1410]" : "hover:bg-[#3d2a19]"
+                      icon === ic
+                        ? "bg-[#b81a1a] text-black"
+                        : "hover:bg-[#2a0a0a]"
                     }`}
                   >
                     {ic}
@@ -147,24 +155,24 @@ export default function MarkerFormDialog({
           )}
 
           <div>
-            <Label className="text-[#e0c893]">
-              Nombre {isCustom ? "" : <span className="text-[#8a6e42]">(opcional)</span>}
+            <Label className={labelCls}>
+              Nombre {isCustom ? "" : <span className="text-[#6b5a4a]">(opcional)</span>}
             </Label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="mt-1 border-[#7a5c2e] bg-[#1f150c] text-[#f2d9a4]"
+              className={inputCls}
               placeholder={isCustom ? "Nombre del marcador" : "Si se deja vacío, se usa el nombre del tipo"}
               autoFocus
             />
           </div>
 
           <div>
-            <Label className="text-[#e0c893]">Nota</Label>
+            <Label className={labelCls}>Nota</Label>
             <Textarea
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="mt-1 border-[#7a5c2e] bg-[#1f150c] text-[#f2d9a4]"
+              className={inputCls}
               placeholder="Descripción opcional"
               rows={3}
             />
@@ -175,14 +183,14 @@ export default function MarkerFormDialog({
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="border-[#7a5c2e] bg-transparent text-[#f2d9a4] hover:bg-[#3d2a19] hover:text-[#f2d9a4]"
+            className="border-2 border-[#3a1414] bg-transparent text-[#e8dfd0] hover:bg-[#2a0a0a] hover:text-[#e8dfd0]"
           >
             Cancelar
           </Button>
           <Button
             onClick={submit}
             disabled={isCustom && !name.trim()}
-            className="bg-[#c9a96a] text-[#1a1410] hover:bg-[#d4b878]"
+            className="bg-[#b81a1a] font-bold uppercase tracking-wider text-[#e8dfd0] hover:bg-[#d42020]"
           >
             Guardar
           </Button>
