@@ -19,9 +19,9 @@ type Props = {
 export default function EditActionsDialog({ marker, onOpenChange, onEdit, onDelete }: Props) {
   return (
     <Dialog open={marker !== null} onOpenChange={onOpenChange}>
-      <DialogContent className="z-[1100] max-w-sm border-2 border-[#7a5c2e] bg-[#2b1e12] text-[#f2d9a4]">
+      <DialogContent className="z-[1100] max-w-sm border-2 border-[#7a1414] bg-black text-[#e8dfd0] shadow-[0_0_30px_rgba(184,26,26,0.5)]">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 font-serif text-lg">
+          <DialogTitle className="flex items-center gap-2 font-serif text-lg uppercase tracking-wider">
             {marker && (
               <>
                 <span>{iconFor(marker.group_key, marker.type_key, marker.icon)}</span>
@@ -30,27 +30,27 @@ export default function EditActionsDialog({ marker, onOpenChange, onEdit, onDele
             )}
           </DialogTitle>
         </DialogHeader>
-        <p className="text-sm text-[#c9a96a]">
+        <p className="text-sm text-[#c8bfae]">
           Arrastra el marcador sobre el mapa para cambiarlo de sitio, o usa una acción:
         </p>
         <div className="grid gap-2">
           <Button
             onClick={onEdit}
-            className="justify-start bg-[#c9a96a] text-[#1a1410] hover:bg-[#d4b878]"
+            className="justify-start bg-[#2a4a6b] font-semibold uppercase tracking-wider text-[#e8dfd0] hover:bg-[#365e88]"
           >
             <Pencil className="mr-2 h-4 w-4" /> Editar
           </Button>
           <Button
             onClick={onDelete}
             variant="destructive"
-            className="justify-start bg-[#8b3a3a] hover:bg-[#a04545]"
+            className="justify-start bg-[#b81a1a] font-semibold uppercase tracking-wider hover:bg-[#d42020]"
           >
             <Trash2 className="mr-2 h-4 w-4" /> Eliminar
           </Button>
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="justify-start border-[#7a5c2e] bg-transparent text-[#f2d9a4] hover:bg-[#3d2a19] hover:text-[#f2d9a4]"
+            className="justify-start border-2 border-[#3a1414] bg-transparent text-[#e8dfd0] hover:bg-[#2a0a0a] hover:text-[#e8dfd0]"
           >
             <X className="mr-2 h-4 w-4" /> Cancelar
           </Button>

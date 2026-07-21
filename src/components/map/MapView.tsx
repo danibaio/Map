@@ -11,6 +11,7 @@ import {
 import { toast } from "sonner";
 
 import mapAsset from "@/assets/map.jpg.asset.json";
+import bgAsset from "@/assets/escuadron-bg.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 import { MARKER_GROUPS, iconFor } from "@/lib/mapData";
 import FilterPanel from "./FilterPanel";
@@ -33,7 +34,6 @@ export type DbMarker = {
   created_at?: string;
 };
 
-// El mapa usa coordenadas simples basadas en la imagen.
 const IMG_W = 1920;
 const IMG_H = 1920;
 const BOUNDS: L.LatLngBoundsExpression = [
@@ -41,7 +41,6 @@ const BOUNDS: L.LatLngBoundsExpression = [
   [IMG_H, IMG_W],
 ];
 
-// Builds a Leaflet DivIcon with an emoji, medieval-styled.
 function buildIcon(emoji: string, color: string) {
   return L.divIcon({
     className: "custom-map-marker",
@@ -52,7 +51,6 @@ function buildIcon(emoji: string, color: string) {
   });
 }
 
-// Componente para capturar clicks en el mapa cuando estamos en modo edición.
 function MapClickHandler({
   editMode,
   onMapClick,
@@ -91,16 +89,12 @@ export default function MapView() {
 
   const [showFilters, setShowFilters] = useState(true);
 
-  // Estado para crear un marcador nuevo en un punto concreto del mapa.
   const [newAt, setNewAt] = useState<{ x: number; y: number } | null>(null);
-  // Estado para el menú de acciones sobre un marcador existente.
   const [actionOn, setActionOn] = useState<DbMarker | null>(null);
-  // Estado para editar un marcador existente.
   const [editing, setEditing] = useState<DbMarker | null>(null);
 
   const mapRef = useRef<L.Map | null>(null);
 
-  // Carga inicial + realtime
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -149,7 +143,6 @@ export default function MapView() {
     };
   }, []);
 
-  // Filtrado real: si el grupo o el tipo está desactivado, no se renderiza.
   const visibleMarkers = useMemo(() => {
     return markers.filter((m) => {
       if (!activeGroups[m.group_key]) return false;
@@ -226,7 +219,6 @@ export default function MapView() {
       await performDelete(marker.id);
       return;
     }
-    // Antiguo: requiere contraseña de borrado.
     setActionOn(null);
     setAskDeletePassword(marker);
   };
@@ -271,14 +263,22 @@ export default function MapView() {
   };
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-black">
-      {/* Header medieval */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-[900] flex items-start justify-between p-4">
+    <div
+      className="relative h-screen w-screen overflow-hidden bg-black"
+      style={{
+        backgroundImage: `url(${bgAsset.url})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* Header */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[900] flex items-start justify-between gap-3 p-4">
         <div className="pointer-events-auto">
           <Button
             variant="outline"
             size="sm"
-            className="border-[#7a5c2e] bg-[#2b1e12]/90 text-[#f2d9a4] hover:bg-[#3d2a19] hover:text-[#fff4d6]"
+            className="border-2 border-[#7a1414] bg-black/85 font-serif tracking-wider text-[#e8dfd0] shadow-[0_0_12px_rgba(120,20,20,0.4)] hover:bg-[#2a0a0a] hover:text-[#fff]"
             onClick={() => setShowFilters((s) => !s)}
           >
             <Menu className="mr-2 h-4 w-4" /> Filtros
@@ -286,21 +286,23 @@ export default function MapView() {
         </div>
 
         <div className="pointer-events-none flex-1 text-center">
-          <h1 className="font-serif text-3xl font-bold tracking-wider text-[#f2d9a4] drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] sm:text-4xl">
-            ⚔ Escuadrón de las Sombras ⚔
-          </h1>
+          <div className="inline-block rounded-sm border-y-2 border-[#2a4a6b] bg-black/70 px-6 py-1 shadow-[0_0_20px_rgba(120,20,20,0.35)] backdrop-blur-sm">
+            <h1 className="font-serif text-2xl font-black uppercase tracking-[0.25em] text-[#e8dfd0] drop-shadow-[0_2px_6px_rgba(184,26,26,0.7)] sm:text-3xl">
+              Escuadrón <span className="text-[#b81a1a]">de las</span> Sombras
+            </h1>
+          </div>
         </div>
 
         <div className="pointer-events-auto flex items-center gap-2">
           {editMode && (
-            <span className="rounded-md border border-[#c9a96a] bg-[#3d2a19]/95 px-3 py-1.5 text-sm font-semibold text-[#f2d9a4] shadow-lg">
-              ✎ Modo edición
+            <span className="rounded-sm border-2 border-[#b81a1a] bg-black/85 px-3 py-1.5 font-serif text-sm font-semibold uppercase tracking-wider text-[#e8dfd0] shadow-[0_0_12px_rgba(184,26,26,0.5)]">
+              ✎ Edición
             </span>
           )}
           <Button
             variant="outline"
             size="sm"
-            className="border-[#7a5c2e] bg-[#2b1e12]/90 text-[#f2d9a4] hover:bg-[#3d2a19] hover:text-[#fff4d6]"
+            className="border-2 border-[#7a1414] bg-black/85 font-serif tracking-wider text-[#e8dfd0] shadow-[0_0_12px_rgba(120,20,20,0.4)] hover:bg-[#2a0a0a] hover:text-[#fff]"
             onClick={handleToggleEditMode}
           >
             {editMode ? <LockOpen className="mr-2 h-4 w-4" /> : <Lock className="mr-2 h-4 w-4" />}
@@ -310,14 +312,12 @@ export default function MapView() {
       </div>
 
 
-      {/* Panel de filtros */}
       {showFilters && (
         <FilterPanel
           activeGroups={activeGroups}
           activeTypes={activeTypes}
           onChangeGroup={(key, v) => {
             setActiveGroups((prev) => ({ ...prev, [key]: v }));
-            // Al activar/desactivar un grupo, también actualizamos sus tipos.
             setActiveTypes((prev) => {
               const next = { ...prev };
               const g = MARKER_GROUPS.find((g) => g.key === key);
@@ -332,7 +332,6 @@ export default function MapView() {
         />
       )}
 
-      {/* Mapa Leaflet */}
       <MapContainer
         crs={L.CRS.Simple}
         bounds={BOUNDS}
@@ -348,7 +347,7 @@ export default function MapView() {
         ref={(m) => {
           if (m) mapRef.current = m;
         }}
-        style={{ background: "#000000" }}
+        style={{ background: "transparent" }}
       >
         <ImageOverlay url={mapAsset.url} bounds={BOUNDS} />
         <MapClickHandler editMode={editMode} onMapClick={handleMapClick} />
@@ -397,17 +396,16 @@ export default function MapView() {
       </MapContainer>
 
       {/* Autor */}
-      <div className="pointer-events-none absolute bottom-3 right-4 z-[900] rounded-md border border-[#7a5c2e] bg-[#2b1e12]/90 px-3 py-1 font-serif text-xs text-[#c9a96a] shadow-lg">
-        Creado por <span className="font-bold text-[#f2d9a4]">Hitt0</span>
+      <div className="pointer-events-none absolute bottom-3 right-4 z-[900] rounded-sm border-2 border-[#7a1414] bg-black/85 px-3 py-1 font-serif text-xs uppercase tracking-widest text-[#e8dfd0] shadow-[0_0_10px_rgba(184,26,26,0.4)]">
+        Creado por <span className="font-bold text-[#b81a1a]">Hitt0</span>
       </div>
 
       {loading && (
-        <div className="absolute inset-0 z-[800] flex items-center justify-center bg-black/80 text-[#f2d9a4]">
+        <div className="absolute inset-0 z-[800] flex items-center justify-center bg-black/85 font-serif uppercase tracking-widest text-[#e8dfd0]">
           Cargando mapa...
         </div>
       )}
 
-      {/* Diálogos */}
       <PasswordDialog
         open={askPassword}
         onOpenChange={setAskPassword}
