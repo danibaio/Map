@@ -67,6 +67,28 @@ function MapClickHandler({
   return null;
 }
 
+function ZoomScaleTracker() {
+  const map = useMapEvents({
+    zoom() {
+      applyScale();
+    },
+  });
+  const applyScale = () => {
+    const z = map.getZoom();
+    // zoom range: -2 (out) .. 3 (in). Linear scale 0.3 -> 1.6
+    const scale = Math.max(0.3, Math.min(1.6, 0.3 + (z + 2) * 0.26));
+    const container = map.getContainer();
+    container.style.setProperty("--marker-scale", scale.toFixed(3));
+  };
+  // apply on mount
+  useEffect(() => {
+    applyScale();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return null;
+}
+
+
 
 
 
