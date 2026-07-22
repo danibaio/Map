@@ -365,7 +365,9 @@ export default function MapView() {
         style={{ background: "transparent" }}
       >
         <ImageOverlay url={mapAsset.url} bounds={BOUNDS} />
+        <ZoomScaleTracker />
         <MapClickHandler editMode={editMode} onMapClick={handleMapClick} />
+
 
 
         {visibleMarkers.map((m) => {
