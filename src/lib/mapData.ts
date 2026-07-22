@@ -40,7 +40,7 @@ export const MARKER_GROUPS: MarkerGroup[] = [
   },
   {
     key: "animals",
-    name: "Animals",
+    name: "Criaturas",
     color: "#8b6d3f",
     types: [
       t("Akrep", "🦂"),
@@ -73,7 +73,7 @@ export const MARKER_GROUPS: MarkerGroup[] = [
   },
   {
     key: "fish",
-    name: "Fish",
+    name: "Peces",
     color: "#4a7ba6",
     types: [
       t("Bassile", "🐟"),
@@ -96,7 +96,7 @@ export const MARKER_GROUPS: MarkerGroup[] = [
   },
   {
     key: "wood",
-    name: "Wood",
+    name: "Madera",
     color: "#6b4423",
     types: [
       t("Whitewood", "🪵"),
@@ -106,7 +106,7 @@ export const MARKER_GROUPS: MarkerGroup[] = [
   },
   {
     key: "flora",
-    name: "Flora",
+    name: "Plantas",
     color: "#4a7c3a",
     types: [
       t("Sea Dew", "🌱"),
@@ -121,7 +121,7 @@ export const MARKER_GROUPS: MarkerGroup[] = [
   },
   {
     key: "ore",
-    name: "Ore",
+    name: "Minerales",
     color: "#8a8a8a",
     types: [
       t("Bor", "⚗️"),
@@ -135,16 +135,8 @@ export const MARKER_GROUPS: MarkerGroup[] = [
     ],
   },
   {
-    key: "temples",
-    name: "Temples",
-    color: "#b8860b",
-    types: [
-      t("Temple", "⛩️"),
-    ],
-  },
-  {
     key: "landmarks",
-    name: "Landmarks",
+    name: "Puntos de Interés",
     color: "#a67c3a",
     types: [
       t("Point of Interest", "📍"),
@@ -164,10 +156,10 @@ export const MARKER_GROUPS: MarkerGroup[] = [
   },
   {
     key: "item_spawns",
-    name: "Item Spawns",
+    name: "Loot",
     color: "#d4af37",
     types: [
-      t("Chests", "🧰"),
+      t("Lockpicking Chest", "🧰"),
       t("Chest", "📦"),
       t("Barrel", "🛢️"),
     ],
