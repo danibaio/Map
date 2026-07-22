@@ -10,8 +10,8 @@ import {
 } from "react-leaflet";
 import { toast } from "sonner";
 
-import mapAsset from "@/assets/map.jpg.asset.json";
-import bgAsset from "@/assets/escuadron-bg.png.asset.json";
+import mapAsset from "@/assets/mapa-final.png.asset.json";
+import bgAsset from "@/assets/fondo-final.jpg.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 import { MARKER_GROUPS, iconFor } from "@/lib/mapData";
 import FilterPanel from "./FilterPanel";
@@ -285,13 +285,8 @@ export default function MapView() {
           </Button>
         </div>
 
-        <div className="pointer-events-none flex-1 text-center">
-          <div className="inline-block rounded-sm border-y-2 border-[#2a4a6b] bg-black/70 px-6 py-1 shadow-[0_0_20px_rgba(120,20,20,0.35)] backdrop-blur-sm">
-            <h1 className="font-serif text-2xl font-black uppercase tracking-[0.25em] text-[#e8dfd0] drop-shadow-[0_2px_6px_rgba(184,26,26,0.7)] sm:text-3xl">
-              Escuadrón <span className="text-[#b81a1a]">de las</span> Sombras
-            </h1>
-          </div>
-        </div>
+        <div className="pointer-events-none flex-1" />
+
 
         <div className="pointer-events-auto flex items-center gap-2">
           {editMode && (
