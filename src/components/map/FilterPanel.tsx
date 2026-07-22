@@ -29,7 +29,7 @@ export default function FilterPanel({
       {/* Conector visual con el botón de arriba */}
       <div className="mx-auto -mt-[2px] h-1 w-16 border-x-2 border-[#7a1414] bg-black/92" />
 
-      <ScrollArea className="max-h-[65vh] px-2 py-2">
+      <ScrollArea className="medieval-scroll max-h-[calc(100vh-11rem)] px-2 py-2">
         <div className="space-y-1.5">
           {MARKER_GROUPS.map((g) => {
             const gActive = activeGroups[g.key];
