@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { MARKER_GROUPS } from "@/lib/mapData";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronRight } from "lucide-react";
+
 
 type Props = {
   activeGroups: Record<string, boolean>;
