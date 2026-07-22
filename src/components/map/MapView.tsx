@@ -11,7 +11,7 @@ import {
 import { toast } from "sonner";
 
 import mapAsset from "@/assets/mapa-final.png.asset.json";
-import bgAsset from "@/assets/fondo-final.jpg.asset.json";
+import bgAsset from "@/assets/escuadron-fondo.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 import { MARKER_GROUPS, iconFor } from "@/lib/mapData";
 import FilterPanel from "./FilterPanel";
@@ -19,7 +19,7 @@ import MarkerFormDialog from "./MarkerFormDialog";
 import EditActionsDialog from "./EditActionsDialog";
 import PasswordDialog from "./PasswordDialog";
 import { Button } from "@/components/ui/button";
-import { Lock, LockOpen, Menu } from "lucide-react";
+import { Lock, LockOpen, Swords } from "lucide-react";
 
 
 export type DbMarker = {
@@ -272,60 +272,57 @@ export default function MapView() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      {/* Header */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-[900] flex items-start justify-between gap-3 p-4">
-        <div className="pointer-events-auto">
-          <Button
-            variant="outline"
-            size="sm"
-            className="border-2 border-[#7a1414] bg-black/85 font-serif tracking-wider text-[#e8dfd0] shadow-[0_0_12px_rgba(120,20,20,0.4)] hover:bg-[#2a0a0a] hover:text-[#fff]"
-            onClick={() => setShowFilters((s) => !s)}
-          >
-            <Menu className="mr-2 h-4 w-4" /> Filtros
-          </Button>
-        </div>
-
-        <div className="pointer-events-none flex-1" />
-
-
-        <div className="pointer-events-auto flex items-center gap-2">
-          {editMode && (
-            <span className="rounded-sm border-2 border-[#b81a1a] bg-black/85 px-3 py-1.5 font-serif text-sm font-semibold uppercase tracking-wider text-[#e8dfd0] shadow-[0_0_12px_rgba(184,26,26,0.5)]">
-              ✎ Edición
-            </span>
-          )}
-          <Button
-            variant="outline"
-            size="sm"
-            className="border-2 border-[#7a1414] bg-black/85 font-serif tracking-wider text-[#e8dfd0] shadow-[0_0_12px_rgba(120,20,20,0.4)] hover:bg-[#2a0a0a] hover:text-[#fff]"
-            onClick={handleToggleEditMode}
-          >
-            {editMode ? <LockOpen className="mr-2 h-4 w-4" /> : <Lock className="mr-2 h-4 w-4" />}
-            {editMode ? "Salir" : "Modo edición"}
-          </Button>
-        </div>
+      {/* Esquina superior izquierda: botón Filtros + panel anclado */}
+      <div className="absolute left-4 top-4 z-[900] w-64">
+        <Button
+          variant="outline"
+          size="sm"
+          className={`w-full justify-start border-2 border-[#7a1414] bg-black/90 font-serif tracking-widest text-[#e8dfd0] shadow-[0_0_12px_rgba(120,20,20,0.4)] hover:bg-[#2a0a0a] hover:text-[#fff] ${
+            showFilters ? "rounded-b-none border-b-0" : ""
+          }`}
+          onClick={() => setShowFilters((s) => !s)}
+        >
+          <Swords className="mr-2 h-4 w-4 text-[#b81a1a]" />
+          <span className="font-bold uppercase">Filtros</span>
+        </Button>
+        {showFilters && (
+          <FilterPanel
+            activeGroups={activeGroups}
+            activeTypes={activeTypes}
+            onChangeGroup={(key, v) => {
+              setActiveGroups((prev) => ({ ...prev, [key]: v }));
+              setActiveTypes((prev) => {
+                const next = { ...prev };
+                const g = MARKER_GROUPS.find((g) => g.key === key);
+                if (g) for (const t of g.types) next[`${key}:${t.key}`] = v;
+                return next;
+              });
+            }}
+            onChangeType={(gkey, tkey, v) =>
+              setActiveTypes((prev) => ({ ...prev, [`${gkey}:${tkey}`]: v }))
+            }
+          />
+        )}
       </div>
 
+      {/* Esquina superior derecha: modo edición */}
+      <div className="absolute right-4 top-4 z-[900] flex items-center gap-2">
+        {editMode && (
+          <span className="rounded-sm border-2 border-[#b81a1a] bg-black/85 px-3 py-1.5 font-serif text-sm font-semibold uppercase tracking-wider text-[#e8dfd0] shadow-[0_0_12px_rgba(184,26,26,0.5)]">
+            ✎ Edición
+          </span>
+        )}
+        <Button
+          variant="outline"
+          size="sm"
+          className="border-2 border-[#7a1414] bg-black/85 font-serif tracking-wider text-[#e8dfd0] shadow-[0_0_12px_rgba(120,20,20,0.4)] hover:bg-[#2a0a0a] hover:text-[#fff]"
+          onClick={handleToggleEditMode}
+        >
+          {editMode ? <LockOpen className="mr-2 h-4 w-4" /> : <Lock className="mr-2 h-4 w-4" />}
+          {editMode ? "Salir" : "Modo edición"}
+        </Button>
+      </div>
 
-      {showFilters && (
-        <FilterPanel
-          activeGroups={activeGroups}
-          activeTypes={activeTypes}
-          onChangeGroup={(key, v) => {
-            setActiveGroups((prev) => ({ ...prev, [key]: v }));
-            setActiveTypes((prev) => {
-              const next = { ...prev };
-              const g = MARKER_GROUPS.find((g) => g.key === key);
-              if (g) for (const t of g.types) next[`${key}:${t.key}`] = v;
-              return next;
-            });
-          }}
-          onChangeType={(gkey, tkey, v) =>
-            setActiveTypes((prev) => ({ ...prev, [`${gkey}:${tkey}`]: v }))
-          }
-          onClose={() => setShowFilters(false)}
-        />
-      )}
 
       <MapContainer
         crs={L.CRS.Simple}
@@ -339,6 +336,7 @@ export default function MapView() {
         zoom={-1}
         className="h-full w-full"
         attributionControl={false}
+        zoomControl={false}
         ref={(m) => {
           if (m) mapRef.current = m;
         }}
