@@ -29,7 +29,7 @@ export default function FilterPanel({
       {/* Conector visual con el botón de arriba */}
       <div className="mx-auto -mt-[2px] h-1 w-16 border-x-2 border-[#7a1414] bg-black/92" />
 
-      <ScrollArea className="medieval-scroll max-h-[calc(100vh-11rem)] px-2 py-2">
+      <div className="medieval-scroll max-h-[calc(100vh-11rem)] overflow-y-auto overflow-x-hidden px-2 py-2">
         <div className="space-y-1.5">
           {MARKER_GROUPS.map((g) => {
             const gActive = activeGroups[g.key];
@@ -68,7 +68,7 @@ export default function FilterPanel({
                   </span>
                 </div>
                 {isOpen && (
-                  <div className="space-y-1 border-t border-[#3a1414] px-2 py-1.5 pl-7">
+                  <div className="medieval-scroll max-h-64 space-y-1 overflow-y-auto border-t border-[#3a1414] px-2 py-1.5 pl-7">
                     {g.types.map((tp) => {
                       const key = `${g.key}:${tp.key}`;
                       return (
@@ -94,7 +94,8 @@ export default function FilterPanel({
             );
           })}
         </div>
-      </ScrollArea>
+      </div>
+
       <div className="space-y-1.5 border-t-2 border-[#7a1414] bg-gradient-to-r from-[#2a0a0a] via-black to-[#2a0a0a] p-2">
         <Button
           variant="outline"
