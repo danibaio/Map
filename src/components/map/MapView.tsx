@@ -336,6 +336,7 @@ export default function MapView() {
         zoom={-1}
         className="h-full w-full"
         attributionControl={false}
+        zoomControl={false}
         ref={(m) => {
           if (m) mapRef.current = m;
         }}
