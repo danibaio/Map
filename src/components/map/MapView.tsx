@@ -413,8 +413,8 @@ export default function MapView() {
       </MapContainer>
 
       {/* Autor */}
-      <div className="pointer-events-none absolute bottom-3 right-4 z-[900] rounded-sm border-2 border-[#7a1414] bg-black/85 px-3 py-1 font-serif text-xs uppercase tracking-widest text-[#e8dfd0] shadow-[0_0_10px_rgba(184,26,26,0.4)]">
-        Creado por <span className="font-bold text-[#b81a1a]">Hitt0</span>
+      <div className="pointer-events-none absolute bottom-3 right-4 z-[300] font-serif text-xs uppercase tracking-widest text-neutral-500">
+        Creado por <span className="font-bold">Hitt0</span>
       </div>
 
       {loading && (
