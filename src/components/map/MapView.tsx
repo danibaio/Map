@@ -10,8 +10,8 @@ import {
 } from "react-leaflet";
 import { toast } from "sonner";
 
-import mapAsset from "@/assets/mapa-final.png.asset.json";
-import bgAsset from "@/assets/escuadron-fondo.png.asset.json";
+const mapAsset = { url: "/mapa-final.png" };
+const bgAsset = { url: "/escuadron-fondo.png" };
 import { supabase } from "@/integrations/supabase/client";
 import { MARKER_GROUPS, iconFor } from "@/lib/mapData";
 import FilterPanel from "./FilterPanel";
