@@ -136,7 +136,7 @@ export const MARKER_GROUPS: MarkerGroup[] = [
   },
   {
     key: "landmarks",
-    name: "Puntos de Interés",
+    name: "Localizaciones",
     color: "#a67c3a",
     types: [
       t("Point of Interest", "📍"),
