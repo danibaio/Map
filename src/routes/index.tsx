@@ -8,16 +8,16 @@ export const Route = createFileRoute("/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Escuadrón de las Sombras — Mapa Interactivo" },
+      { title: "Mapa Interactivo" },
       {
         name: "description",
         content:
-          "Mapa interactivo del Escuadrón de las Sombras. Consulta ubicaciones, NPCs, recursos y enemigos.",
+          "Mapa interactivo . Consulta ubicaciones, NPCs, recursos y enemigos.",
       },
-      { property: "og:title", content: "Escuadrón de las Sombras — Mapa Interactivo" },
+      { property: "og:title", content: "Mapa Interactivo" },
       {
         property: "og:description",
-        content: "Mapa interactivo del Escuadrón de las Sombras. Consulta ubicaciones, NPCs, recursos y enemigos.",
+        content: "Mapa interactivo. Consulta ubicaciones, NPCs, recursos y enemigos.",
       },
       { property: "og:type", content: "website" },
     ],
