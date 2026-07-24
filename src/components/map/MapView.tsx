@@ -246,7 +246,7 @@ export default function MapView() {
   };
 
   const handleDeletePasswordSubmit = async (pwd: string) => {
-    if (pwd !== "0107") {
+    if (pwd !== "9922") {
       toast.error("Contraseña incorrecta");
       return;
     }
@@ -275,7 +275,7 @@ export default function MapView() {
   };
 
   const handlePasswordSubmit = (pwd: string) => {
-    if (pwd === "0106") {
+    if (pwd === "2244") {
       setEditMode(true);
       setAskPassword(false);
       toast.success("Modo edición activado");
