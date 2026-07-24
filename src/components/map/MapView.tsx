@@ -414,7 +414,7 @@ export default function MapView() {
 
       {/* Autor */}
       <div className="pointer-events-none absolute bottom-3 right-4 z-[300] font-serif text-xs uppercase tracking-widest text-neutral-500">
-        Creado por <span className="font-bold">Hitt0</span>
+        Mapa cedido por zzESzz. Creado por <span className="font-bold">Hitt0</span>
       </div>
 
       {loading && (
